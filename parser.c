@@ -82,5 +82,5 @@ Value *parse_many_values(char *cursor) {
     if (car == NULL)
         return nil(cursor);
 
-    return cons(car, parse_many_values(cursor));
+    return cons(car, parse_many_values(value_end(car)));
 }
