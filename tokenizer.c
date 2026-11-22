@@ -57,15 +57,15 @@ char *match_one_or_more(char *cursor, bool (*predicate)(char)) {
 }
 
 
-Token *left_paren(char *start) {
+Token *scan_left_paren(char *start) {
     return token_if_matched(TOKEN_LEFT_PAREN, start, match_char(start, '('));
 }
 
-Token *right_paren(char *start) {
+Token *scan_right_paren(char *start) {
     return token_if_matched(TOKEN_RIGHT_PAREN, start, match_char(start, ')'));
 }
 
-Token *number(char *start) {
+Token *scan_number(char *start) {
     char *integer_end = match_one_or_more(start, is_digit);
     char *decimal_end = match_one_or_more(match_char(integer_end, '.'), is_digit);
     
@@ -73,21 +73,21 @@ Token *number(char *start) {
     return token_if_matched(TOKEN_NUMBER, start, decimal_end ?: integer_end);
 }
 
-Token *boolean(char *start) {
+Token *scan_boolean(char *start) {
     char *end = match_one_of(match_char(start, '#'), "tf");
 
     return token_if_matched(TOKEN_BOOLEAN, start, end);
 }
 
-Token *symbol(char *start) {
+Token *scan_symbol(char *start) {
     return token_if_matched(TOKEN_SYMBOL, start, match_one_or_more(start, is_symbol_char));
 }
 
 
-Token *next_token(char *cursor) {
-    return left_paren(cursor)
-        ?: right_paren(cursor)
-        ?: number(cursor)
-        ?: boolean(cursor)
-        ?: symbol(cursor);
+Token *scan_token(char *cursor) {
+    return scan_left_paren(cursor)
+        ?: scan_right_paren(cursor)
+        ?: scan_number(cursor)
+        ?: scan_boolean(cursor)
+        ?: scan_symbol(cursor);
 }

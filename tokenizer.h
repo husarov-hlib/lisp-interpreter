@@ -16,7 +16,6 @@ typedef struct {
     int length;
 } Token;
 
-Token *next_token(char *cursor);
-
+Token *scan_token(char *cursor);
 
 #endif
