@@ -7,6 +7,9 @@
 #include "parser.h"
 
 
+Value *parse_many_values(char *cursor);
+
+
 Token expect_token(char *cursor, TokenType expected) {
     Token token = scan_token(cursor);
 
@@ -62,4 +65,12 @@ Value *parse_many_values(char *cursor) {
         return nil(cursor);
 
     return cons(car, parse_many_values(value_end(car)));
+}
+
+Value *parse_program(char *cursor) {
+    Value *program = parse_many_values(cursor);
+
+    expect_token(value_end(program), TOKEN_EOF);
+
+    return program;
 }
