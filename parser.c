@@ -40,7 +40,7 @@ Value *parse_list(Span left_paren) {
 
     // there is no separate list node, the cons chain itself is the list,
     // so we set its span to cover the parentheses
-    list->span = span_join(left_paren, right_paren);
+    list->span = span_cover(left_paren, right_paren);
 
     return list;
 }

@@ -30,7 +30,7 @@ Value *make_symbol(Span span) {
 }
 
 Value *cons(Value *car, Value *cdr) {
-    Value *value = make_value(VALUE_CONS, span_join(car->span, cdr->span));
+    Value *value = make_value(VALUE_CONS, span_cover(car->span, cdr->span));
     value->cons.car = car;
     value->cons.cdr = cdr;
 
