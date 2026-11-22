@@ -1,6 +1,8 @@
 #ifndef SPAN_H
 #define SPAN_H
 
+#include <string.h>
+#include <stdbool.h>
 #include <stddef.h>
 
 typedef struct {
@@ -21,6 +23,11 @@ static inline Span span_between(char *start, char *end) {
 
 static inline Span span_join(Span first, Span last) {
     return span_between(first.start, span_end(last));
+}
+
+static inline bool span_equals_string(Span span, char *string) {
+    return span.length == strlen(string)
+        && strncmp(span.start, string, span.length) == 0;
 }
 
 #endif
