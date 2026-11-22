@@ -92,6 +92,8 @@ Token *scan_symbol(char *start) {
 
 
 Token *scan_token(char *cursor) {
+    cursor = skip_whitespace(cursor);
+
     return scan_left_paren(cursor)
         ?: scan_right_paren(cursor)
         ?: scan_number(cursor)
