@@ -26,7 +26,7 @@ Value *make_boolean(bool boolean, Span span) {
 }
 
 Value *make_symbol(Span span) {
-    return make_value(VALUE_BOOLEAN, span);
+    return make_value(VALUE_SYMBOL, span);
 }
 
 Value *cons(Value *car, Value *cdr) {
