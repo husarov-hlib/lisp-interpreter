@@ -40,8 +40,3 @@ Value *cons(Value *car, Value *cdr) {
 Value *nil(char *cursor) {
     return make_value(VALUE_NIL, span_between(cursor, cursor));
 }
-
-
-char *value_end(Value *value) {
-    return span_end(value->span);
-}
