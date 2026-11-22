@@ -38,6 +38,8 @@ Value *parse_list(Span left_paren) {
     Value *list = parse_many_values(span_end(left_paren));
     Span right_paren = expect_token(value_end(list), TOKEN_RIGHT_PAREN).span;
 
+    // there is no separate list node, the cons chain itself is the list,
+    // so we set its span to cover the parentheses
     list->span = span_join(left_paren, right_paren);
 
     return list;
