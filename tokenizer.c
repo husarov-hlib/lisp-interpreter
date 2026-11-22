@@ -5,6 +5,10 @@
 #include "tokenizer.h"
 
 
+char DIGITS[] = "0123456789";
+char SYMBOL_CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/<>=!?_$%&:~^.";
+
+
 Token *token_if_matched(TokenType type, char *start, char *end) {
     if (end == NULL) return NULL;
 
@@ -25,18 +29,6 @@ bool is_one_of(char c, char *charset) {
     return strchr(charset, c) != NULL;
 }
 
-bool is_digit(char c) {
-    return is_one_of(c, "0123456789");
-}
-
-bool is_alpha(char c) {
-    return is_one_of(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-}
-
-bool is_symbol_char(char c) {
-    return is_alpha(c) || is_one_of(c, "+-*/<>=!?_$%&:~^.");
-}
-
 
 char *match_char(char *cursor, char expected) {
     if (cursor == NULL) return NULL;
@@ -50,11 +42,11 @@ char *match_one_of(char *cursor, char *charset) {
     return is_one_of(*cursor, charset) ? cursor + 1 : NULL;
 }
 
-char *match_one_or_more(char *cursor, bool (*predicate)(char)) {
+char *match_one_or_more(char *cursor, char *charset) {
     if (cursor == NULL) return NULL;
 
     char *end = cursor;
-    while (predicate(*end))
+    while (is_one_of(*end, charset))
         end++;
 
     return cursor == end ? NULL : end;
@@ -70,8 +62,8 @@ Token *scan_right_paren(char *start) {
 }
 
 Token *scan_number(char *start) {
-    char *integer_end = match_one_or_more(start, is_digit);
-    char *decimal_end = match_one_or_more(match_char(integer_end, '.'), is_digit);
+    char *integer_end = match_one_or_more(start, DIGITS);
+    char *decimal_end = match_one_or_more(match_char(integer_end, '.'), DIGITS);
     
     // if matching the decimal returns NULL, ?: will fall back to the integer match
     return token_if_matched(TOKEN_NUMBER, start, decimal_end ?: integer_end);
@@ -84,7 +76,7 @@ Token *scan_boolean(char *start) {
 }
 
 Token *scan_symbol(char *start) {
-    return token_if_matched(TOKEN_SYMBOL, start, match_one_or_more(start, is_symbol_char));
+    return token_if_matched(TOKEN_SYMBOL, start, match_one_or_more(start, SYMBOL_CHARS));
 }
 
 
