@@ -10,8 +10,7 @@ Token *token_if_matched(TokenType type, char *start, char *end) {
 
     Token *token = malloc(sizeof(Token));
     token->type = type;
-    token->start = start;
-    token->length = end - start;
+    token->span = span_between(start, end);
 
     return token;
 }

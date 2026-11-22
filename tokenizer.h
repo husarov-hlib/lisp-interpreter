@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
+#include "span.h"
 
 typedef enum {
     TOKEN_LEFT_PAREN,
@@ -12,8 +13,7 @@ typedef enum {
 
 typedef struct {
     TokenType type;
-    char *start;
-    int length;
+    Span span;
 } Token;
 
 Token *scan_token(char *cursor);
