@@ -19,4 +19,8 @@ static inline Span span_between(char *start, char *end) {
     };
 }
 
+static inline Span span_join(Span first, Span last) {
+    return span_between(first.start, span_end(last));
+}
+
 #endif
