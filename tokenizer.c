@@ -7,6 +7,7 @@
 
 char DIGITS[] = "0123456789";
 char SYMBOL_CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/<>=!?_$%&:~^.";
+char WHITESPACE[] = " \t\r\n";
 
 
 Token *token_if_matched(TokenType type, char *start, char *end) {
@@ -55,6 +56,11 @@ char *match_one_or_more(char *cursor, char *charset) {
     char *end = match_zero_or_more(cursor, charset);
 
     return end == cursor ? NULL : end;
+}
+
+
+char *skip_whitespace(char *cursor) {
+    return match_zero_or_more(cursor, WHITESPACE);
 }
 
 
