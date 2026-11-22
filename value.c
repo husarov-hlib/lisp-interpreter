@@ -37,8 +37,8 @@ Value *cons(Value *car, Value *cdr) {
     return value;
 }
 
-Value *nil(char *position) {
-    return make_value(VALUE_NIL, span_between(position, position));
+Value *nil(char *cursor) {
+    return make_value(VALUE_NIL, span_between(cursor, cursor));
 }
 
 
