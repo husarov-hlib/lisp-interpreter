@@ -16,6 +16,11 @@ Token *token_if_matched(TokenType type, char *start, char *end) {
 }
 
 
+char *token_end(Token *token) {
+    return token ? span_end(token->span) : NULL;
+}
+
+
 bool is_one_of(char c, char *charset) {
     return strchr(charset, c) != NULL;
 }

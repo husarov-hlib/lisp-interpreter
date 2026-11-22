@@ -17,5 +17,6 @@ typedef struct {
 } Token;
 
 Token *scan_token(char *cursor);
+char *token_end(Token *token);
 
 #endif

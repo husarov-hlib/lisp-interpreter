@@ -49,3 +49,8 @@ Value *nil(char *position) {
 
     return value;
 }
+
+
+char *value_end(Value *value) {
+    return value ? span_end(value->span) : NULL;
+}
