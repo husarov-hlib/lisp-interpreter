@@ -37,7 +37,7 @@ Value *cons(Value *car, Value *cdr) {
     Value *value = make_value(VALUE_CONS);
     value->cons.car = car;
     value->cons.cdr = cdr;
-    value->span = span_between(car->span.start, span_end(cdr->span));
+    value->span = span_join(car->span, cdr->span);
 
     return value;
 }
