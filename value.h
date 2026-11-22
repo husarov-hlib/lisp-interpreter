@@ -19,10 +19,6 @@ typedef struct Value {
         double number;
         bool boolean;
         struct {
-            char *start;
-            int length;
-        } symbol;
-        struct {
             struct Value *car;
             struct Value *cdr;
         } cons;
