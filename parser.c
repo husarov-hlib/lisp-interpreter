@@ -7,71 +7,50 @@
 #include "parser.h"
 
 
-Value *number_if_matched(Token *token) {
-    if (token == NULL) return NULL;
+Token expect_token(char *cursor, TokenType expected) {
+    Token token = scan_token(cursor);
 
+    if (token.type != expected)
+        // TODO: proper error messages
+        exit(1);
+
+    return token;
+}
+
+bool is_number(Span span) {
     char *end;
-    double number = strtod(token->span.start, &end);
-    assert(end - token->span.start == token->span.length);
-
-    return make_number(number, token->span);
+    strtod(span.start, &end);
+    return span_end(span) == end;
 }
 
-Value *boolean_if_matched(Token *token) {
-    if (token == NULL) return NULL;
-
-    return make_boolean(token->span.start[1] == 't', token->span);
+double span_to_double(Span span) {
+    return strtod(span.start, NULL);
 }
 
-Value *symbol_if_matched(Token *token) {
-    if (token == NULL) return NULL;
-
-    return make_symbol(token->span);
+Value *parse_atom(Span atom) {
+    return is_number(atom)                ? make_number(span_to_double(atom), atom)
+         : span_equals_string(atom, "#t") ? make_boolean(true, atom)
+         : span_equals_string(atom, "#f") ? make_boolean(false, atom)
+         :                                  make_symbol(atom);
 }
 
-Value *list_if_matched(Token *left_paren, Value *items, Token *right_paren) {
-    if (left_paren == NULL || items == NULL || right_paren == NULL) return NULL;
+Value *parse_list(Span left_paren) {
+    Value *list = parse_many_values(span_end(left_paren));
+    Span right_paren = expect_token(value_end(list), TOKEN_RIGHT_PAREN).span;
 
-    // list is just its items (which are themselves just a cons-chain),
-    // but a list's span includes the opening and closing parentheses
-    items->span = span_join(left_paren->span, right_paren->span);
+    list->span = span_join(left_paren, right_paren);
 
-    return items;
-}
-
-
-Token *match_token(char *cursor, TokenType expected) {
-    Token *token = scan_token(cursor);
-
-    return (token && token->type == expected) ? token : NULL;
-}
-
-
-Value *parse_number(char *cursor) {
-    return number_if_matched(match_token(cursor, TOKEN_NUMBER));
-}
-
-Value *parse_boolean(char *cursor) {
-    return boolean_if_matched(match_token(cursor, TOKEN_BOOLEAN));
-}
-
-Value *parse_symbol(char *cursor) {
-    return boolean_if_matched(match_token(cursor, TOKEN_BOOLEAN));
-}
-
-Value *parse_list(char *cursor) {
-    Token *left_paren = match_token(cursor, TOKEN_LEFT_PAREN);
-    Value *items = parse_many_values(token_end(left_paren));
-    Token *right_paren = match_token(value_end(items), TOKEN_RIGHT_PAREN);
-
-    return list_if_matched(left_paren, items, right_paren);
+    return list;
 }
 
 Value *parse_value(char *cursor) {
-    return parse_number(cursor)
-        ?: parse_boolean(cursor)
-        ?: parse_symbol(cursor)
-        ?: parse_list(cursor);
+    Token token = scan_token(cursor);
+
+    switch (token.type) {
+        case TOKEN_ATOM:        return parse_atom(token.span);
+        case TOKEN_LEFT_PAREN:  return parse_list(token.span);
+        default:                return NULL;
+    }
 }
 
 Value *parse_many_values(char *cursor) {

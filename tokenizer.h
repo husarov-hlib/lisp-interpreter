@@ -6,9 +6,8 @@
 typedef enum {
     TOKEN_LEFT_PAREN,
     TOKEN_RIGHT_PAREN,
-    TOKEN_NUMBER,
-    TOKEN_BOOLEAN,
-    TOKEN_SYMBOL,
+    TOKEN_ATOM,
+    TOKEN_EOF,
 } TokenType;
 
 typedef struct {
@@ -16,8 +15,6 @@ typedef struct {
     Span span;
 } Token;
 
-char *token_end(Token *token);
-
-Token *scan_token(char *cursor);
+Token scan_token(char *cursor);
 
 #endif

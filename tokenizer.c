@@ -1,101 +1,36 @@
-#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 
 #include "tokenizer.h"
 
 
-char DIGITS[] = "0123456789";
-char SYMBOL_CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/<>=!?_$%&:~^.";
 char WHITESPACE[] = " \t\r\n";
-
-
-Token *token_if_matched(TokenType type, char *start, char *end) {
-    if (end == NULL) return NULL;
-
-    Token *token = malloc(sizeof(Token));
-    token->type = type;
-    token->span = span_between(start, end);
-
-    return token;
-}
-
-char *token_end(Token *token) {
-    return token ? span_end(token->span) : NULL;
-}
-
-
-bool is_one_of(char c, char *charset) {
-    return strchr(charset, c) != NULL;
-}
-
-
-char *match_char(char *cursor, char expected) {
-    if (cursor == NULL) return NULL;
-
-    return (*cursor == expected) ? cursor + 1 : NULL;
-}
-
-char *match_one_of(char *cursor, char *charset) {
-    if (cursor == NULL) return NULL;
-
-    return is_one_of(*cursor, charset) ? cursor + 1 : NULL;
-}
-
-char *match_zero_or_more(char *cursor, char *charset) {
-    if (cursor == NULL) return NULL;
-
-    while (is_one_of(*cursor, charset))
-        cursor++;
-
-    return cursor;
-}
-
-char *match_one_or_more(char *cursor, char *charset) {
-    char *end = match_zero_or_more(cursor, charset);
-
-    return end == cursor ? NULL : end;
-}
+char DELIMITERS[] = " \t\r\n()";
 
 
 char *skip_whitespace(char *cursor) {
-    return match_zero_or_more(cursor, WHITESPACE);
+    return cursor + strspn(cursor, WHITESPACE);
 }
 
+Token scan_atom(char *cursor) {
+    Span atom = {
+        .start = cursor,
+        .length = strcspn(cursor, DELIMITERS)
+    };
 
-Token *scan_left_paren(char *start) {
-    return token_if_matched(TOKEN_LEFT_PAREN, start, match_char(start, '('));
+    assert(atom.length > 0);
+
+    return (Token) {TOKEN_ATOM, atom};
 }
 
-Token *scan_right_paren(char *start) {
-    return token_if_matched(TOKEN_RIGHT_PAREN, start, match_char(start, ')'));
-}
-
-Token *scan_number(char *start) {
-    char *integer_end = match_one_or_more(start, DIGITS);
-    char *decimal_end = match_one_or_more(match_char(integer_end, '.'), DIGITS);
-
-    // if matching the decimal returns NULL, ?: will fall back to the integer match
-    return token_if_matched(TOKEN_NUMBER, start, decimal_end ?: integer_end);
-}
-
-Token *scan_boolean(char *start) {
-    char *end = match_one_of(match_char(start, '#'), "tf");
-
-    return token_if_matched(TOKEN_BOOLEAN, start, end);
-}
-
-Token *scan_symbol(char *start) {
-    return token_if_matched(TOKEN_SYMBOL, start, match_one_or_more(start, SYMBOL_CHARS));
-}
-
-
-Token *scan_token(char *cursor) {
+Token scan_token(char *cursor) {
     cursor = skip_whitespace(cursor);
 
-    return scan_left_paren(cursor)
-        ?: scan_right_paren(cursor)
-        ?: scan_number(cursor)
-        ?: scan_boolean(cursor)
-        ?: scan_symbol(cursor);
+    switch (*cursor) {
+        case '\0': return (Token) {TOKEN_EOF,         (Span) {cursor, 0}};
+        case '(':  return (Token) {TOKEN_LEFT_PAREN,  (Span) {cursor, 1}};
+        case ')':  return (Token) {TOKEN_RIGHT_PAREN, (Span) {cursor, 1}};
+        default:   return scan_atom(cursor);
+    }
 }
