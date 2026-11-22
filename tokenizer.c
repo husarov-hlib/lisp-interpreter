@@ -6,7 +6,7 @@
 
 
 char DIGITS[] = "0123456789";
-char SYMBOL_CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/<>=!?_$%&:~^.";
+char SYMBOL_CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-*/<>=!?_$%&:~^.";
 
 
 Token *token_if_matched(TokenType type, char *start, char *end) {
