@@ -34,6 +34,6 @@ Value *make_number(double number, Span span);
 Value *make_boolean(bool boolean, Span span);
 Value *make_symbol(Span span);
 Value *cons(Value *car, Value *cdr);
-Value *nil();
+Value *nil(char *position);
 
 #endif

@@ -80,7 +80,7 @@ Value *parse_many_values(char *cursor) {
     Value *car = parse_value(cursor);
 
     if (car == NULL)
-        return nil();
+        return nil(cursor);
 
     return cons(car, parse_many_values(cursor));
 }

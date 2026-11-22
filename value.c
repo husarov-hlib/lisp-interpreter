@@ -42,6 +42,10 @@ Value *cons(Value *car, Value *cdr) {
     return value;
 }
 
-Value *nil() {
-    return make_value(VALUE_NIL);
+Value *nil(char *position) {
+    Value *value = make_value(VALUE_NIL);
+    value->span.start = position;
+    value->span.length = 0;
+
+    return value;
 }
