@@ -3,6 +3,6 @@
 
 #include "value.h"
 
-Value *parse_program(char *cursor);
+Value *parse_program(char *source);
 
 #endif
