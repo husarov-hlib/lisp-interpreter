@@ -42,14 +42,19 @@ char *match_one_of(char *cursor, char *charset) {
     return is_one_of(*cursor, charset) ? cursor + 1 : NULL;
 }
 
-char *match_one_or_more(char *cursor, char *charset) {
+char *match_zero_or_more(char *cursor, char *charset) {
     if (cursor == NULL) return NULL;
 
-    char *end = cursor;
-    while (is_one_of(*end, charset))
-        end++;
+    while (is_one_of(*cursor, charset))
+        cursor++;
 
-    return cursor == end ? NULL : end;
+    return cursor;
+}
+
+char *match_one_or_more(char *cursor, char *charset) {
+    char *end = match_zero_or_more(cursor, charset);
+
+    return end == cursor ? NULL : end;
 }
 
 
