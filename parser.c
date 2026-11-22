@@ -29,6 +29,16 @@ Value *symbol_if_matched(Token *token) {
     return make_symbol(token->span);
 }
 
+Value *list_if_matched(Token *left_paren, Value *items, Token *right_paren) {
+    if (left_paren == NULL || items == NULL || right_paren == NULL) return NULL;
+
+    // list is just its items (which are themselves just a cons-chain),
+    // but a list's span includes the opening and closing parentheses
+    items->span = span_join(left_paren->span, right_paren->span);
+
+    return items;
+}
+
 
 Token *match_token(char *cursor, TokenType expected) {
     Token *token = scan_token(cursor);
@@ -51,22 +61,10 @@ Value *parse_symbol(char *cursor) {
 
 Value *parse_list(char *cursor) {
     Token *left_paren = match_token(cursor, TOKEN_LEFT_PAREN);
+    Value *items = parse_many_values(token_end(left_paren));
+    Token *right_paren = match_token(value_end(items), TOKEN_RIGHT_PAREN);
 
-    if (left_paren == NULL)
-        return NULL;
-
-    cursor = span_end(left_paren->span);
-    Value *items = parse_many_values(cursor);
-
-    cursor = span_end(items->span);
-    Token *right_paren = match_token(cursor, TOKEN_RIGHT_PAREN);
-
-    if (right_paren == NULL)
-        return NULL;
-
-    items->span = span_join(left_paren->span, right_paren->span);
-
-    return items;
+    return list_if_matched(left_paren, items, right_paren);
 }
 
 Value *parse_value(char *cursor) {
