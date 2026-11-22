@@ -5,8 +5,8 @@
 #include "tokenizer.h"
 
 
-static char WHITESPACE[] = " \t\r\n";
-static char DELIMITERS[] = " \t\r\n()";
+static const char WHITESPACE[] = " \t\r\n";
+static const char DELIMITERS[] = " \t\r\n()";
 
 
 static char *skip_whitespace(char *cursor) {
