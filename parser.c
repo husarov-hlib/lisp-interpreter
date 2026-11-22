@@ -7,10 +7,10 @@
 #include "parser.h"
 
 
-Value *parse_many_values(char *cursor);
+static Value *parse_many_values(Parser *parser);
 
 
-Token expect_token(char *cursor, TokenType expected) {
+static Token expect_token(char *cursor, TokenType expected) {
     Token token = scan_token(cursor);
 
     if (token.type != expected)
@@ -20,24 +20,24 @@ Token expect_token(char *cursor, TokenType expected) {
     return token;
 }
 
-bool is_number(Span span) {
+static bool is_number(Span span) {
     char *end;
     strtod(span.start, &end);
     return span_end(span) == end;
 }
 
-double span_to_double(Span span) {
+static double span_to_double(Span span) {
     return strtod(span.start, NULL);
 }
 
-Value *parse_atom(Span atom) {
+static Value *parse_atom(Span atom) {
     return is_number(atom)                ? make_number(span_to_double(atom), atom)
          : span_equals_string(atom, "#t") ? make_boolean(true, atom)
          : span_equals_string(atom, "#f") ? make_boolean(false, atom)
          :                                  make_symbol(atom);
 }
 
-Value *parse_list(Span left_paren) {
+static Value *parse_list(Span left_paren) {
     Value *list = parse_many_values(span_end(left_paren));
     Span right_paren = expect_token(value_end(list), TOKEN_RIGHT_PAREN).span;
 
@@ -48,7 +48,7 @@ Value *parse_list(Span left_paren) {
     return list;
 }
 
-Value *parse_value(char *cursor) {
+static Value *parse_value(char *cursor) {
     Token token = scan_token(cursor);
 
     switch (token.type) {
@@ -58,7 +58,7 @@ Value *parse_value(char *cursor) {
     }
 }
 
-Value *parse_many_values(char *cursor) {
+static Value *parse_many_values(char *cursor) {
     Value *car = parse_value(cursor);
 
     if (car == NULL)

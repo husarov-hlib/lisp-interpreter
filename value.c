@@ -3,7 +3,7 @@
 #include "value.h"
 
 
-Value *make_value(ValueType type, Span span) {
+static Value *make_value(ValueType type, Span span) {
     Value *value = malloc(sizeof(Value));
     value->type = type;
     value->span = span;

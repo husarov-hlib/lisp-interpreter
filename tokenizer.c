@@ -5,15 +5,15 @@
 #include "tokenizer.h"
 
 
-char WHITESPACE[] = " \t\r\n";
-char DELIMITERS[] = " \t\r\n()";
+static char WHITESPACE[] = " \t\r\n";
+static char DELIMITERS[] = " \t\r\n()";
 
 
-char *skip_whitespace(char *cursor) {
+static char *skip_whitespace(char *cursor) {
     return cursor + strspn(cursor, WHITESPACE);
 }
 
-Token scan_atom(char *cursor) {
+static Token scan_atom(char *cursor) {
     Span atom = {
         .start = cursor,
         .length = strcspn(cursor, DELIMITERS)
