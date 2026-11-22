@@ -16,7 +16,8 @@ typedef struct {
     Span span;
 } Token;
 
-Token *scan_token(char *cursor);
 char *token_end(Token *token);
+
+Token *scan_token(char *cursor);
 
 #endif

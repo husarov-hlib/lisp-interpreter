@@ -20,7 +20,6 @@ Token *token_if_matched(TokenType type, char *start, char *end) {
     return token;
 }
 
-
 char *token_end(Token *token) {
     return token ? span_end(token->span) : NULL;
 }
@@ -75,7 +74,7 @@ Token *scan_right_paren(char *start) {
 Token *scan_number(char *start) {
     char *integer_end = match_one_or_more(start, DIGITS);
     char *decimal_end = match_one_or_more(match_char(integer_end, '.'), DIGITS);
-    
+
     // if matching the decimal returns NULL, ?: will fall back to the integer match
     return token_if_matched(TOKEN_NUMBER, start, decimal_end ?: integer_end);
 }
