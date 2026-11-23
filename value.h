@@ -5,10 +5,17 @@
 
 #include "span.h"
 
+typedef struct Env Env;
+typedef struct Value Value;
+
+typedef Value *Builtin(Value *arguments);
+
 typedef enum {
     VALUE_NUMBER,
     VALUE_BOOLEAN,
     VALUE_SYMBOL,
+    VALUE_CLOSURE,
+    VALUE_BUILTIN,
     VALUE_CONS,
     VALUE_NIL,
 } ValueType;
@@ -20,8 +27,14 @@ typedef struct Value {
         double number;
         bool boolean;
         struct {
-            struct Value *car;
-            struct Value *cdr;
+            Env *env;
+            Value *parameters;
+            Value *body;
+        } closure;
+        Builtin *builtin;
+        struct {
+            Value *car;
+            Value *cdr;
         } cons;
     };
 } Value;
