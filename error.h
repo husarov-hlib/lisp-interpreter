@@ -3,6 +3,7 @@
 
 #include "span.h"
 
-void error(char *source, Span span, char *message);
+void error(char *source, Span span, char *format, ...)
+    __attribute__((format(printf, 3, 4)));
 
 #endif
