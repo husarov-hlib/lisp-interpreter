@@ -43,31 +43,31 @@ Value *nil(char *cursor) {
 }
 
 
-Value *car(Value *expr) {
-    assert(expr->type == VALUE_CONS);
-    return expr->cons.car;
+Value *car(Value *list) {
+    assert(list->type == VALUE_CONS);
+    return list->cons.car;
 }
 
-Value *cdr(Value *expr) {
-    assert(expr->type == VALUE_CONS);
-    return expr->cons.cdr;
+Value *cdr(Value *list) {
+    assert(list->type == VALUE_CONS);
+    return list->cons.cdr;
 }
 
-Value *second(Value *expr) {
-    return car(cdr(expr));
+Value *second(Value *list) {
+    return car(cdr(list));
 }
 
-Value *third(Value *expr) {
-    return car(cdr(cdr(expr)));
+Value *third(Value *list) {
+    return car(cdr(cdr(list)));
 }
 
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
 
-int length(Value *value) {
-    if (is_nil(value))
+int length(Value *list) {
+    if (is_nil(list))
         return 0;
 
-    return 1 + length(cdr(value));
+    return 1 + length(cdr(list));
 }

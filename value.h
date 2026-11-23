@@ -45,11 +45,11 @@ Value *make_symbol(Span span);
 Value *cons(Value *car, Value *cdr);
 Value *nil(char *cursor);
 
-Value *car(Value *expr);
-Value *cdr(Value *expr);
-Value *second(Value *expr);
-Value *third(Value *expr);
+Value *car(Value *list);
+Value *cdr(Value *list);
+Value *second(Value *list);
+Value *third(Value *list);
 bool is_nil(Value *value);
-int length(Value *value);
+int length(Value *list);
 
 #endif
