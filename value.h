@@ -51,5 +51,6 @@ Value *second(Value *list);
 Value *third(Value *list);
 bool is_nil(Value *value);
 int length(Value *list);
+void print_value(Value *value);
 
 #endif

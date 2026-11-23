@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "value.h"
@@ -70,4 +71,30 @@ int length(Value *list) {
         return 0;
 
     return 1 + length(cdr(list));
+}
+
+
+void print_value(Value *value) {
+    switch (value->type) {
+        case VALUE_NUMBER:
+            printf("%.15g", value->number);
+            break;
+        case VALUE_BOOLEAN:
+            printf("%s", value->boolean ? "#t" : "#f");
+            break;
+        case VALUE_SYMBOL:
+            printf("%.*s", value->span.length, value->span.start);
+            break;
+        case VALUE_NIL:
+            printf("nil");
+            break;
+        case VALUE_CONS:
+            printf("(");
+            for (Value *list = value; !is_nil(cdr(list)); list = cdr(list))
+                print_value(car(list));
+            printf(")");
+            break;
+        default:
+            printf("unprintable");
+    }
 }
