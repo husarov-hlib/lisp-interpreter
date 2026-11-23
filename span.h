@@ -37,8 +37,7 @@ static inline bool span_equals(Span s1, Span s2) {
 }
 
 static inline bool span_equals_string(Span span, char *string) {
-    return span.length == strlen(string)
-        && strncmp(span.start, string, span.length) == 0;
+    return span_equals(span, span_from_string(string));
 }
 
 #endif
