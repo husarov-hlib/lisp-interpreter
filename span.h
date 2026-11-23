@@ -24,6 +24,18 @@ static inline Span span_cover(Span first, Span last) {
     return span_between(first.start, span_end(last));
 }
 
+static inline Span span_from_string(char *string) {
+    return (Span) {
+        .start = string,
+        .length = (int) strlen(string)
+    };
+}
+
+static inline bool span_equals(Span s1, Span s2) {
+    return s1.length == s2.length
+        && strncmp(s1.start, s2.start, s1.length) == 0;
+}
+
 static inline bool span_equals_string(Span span, char *string) {
     return span.length == strlen(string)
         && strncmp(span.start, string, span.length) == 0;
