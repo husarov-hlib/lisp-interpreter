@@ -47,6 +47,8 @@ Value *nil(char *cursor);
 
 Value *car(Value *expr);
 Value *cdr(Value *expr);
+Value *second(Value *expr);
+Value *third(Value *expr);
 bool is_nil(Value *value);
 int length(Value *value);
 

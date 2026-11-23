@@ -53,6 +53,14 @@ Value *cdr(Value *expr) {
     return expr->cons.cdr;
 }
 
+Value *second(Value *expr) {
+    return car(cdr(expr));
+}
+
+Value *third(Value *expr) {
+    return car(cdr(cdr(expr)));
+}
+
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
