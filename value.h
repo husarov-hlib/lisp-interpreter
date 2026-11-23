@@ -49,6 +49,7 @@ Value *car(Value *list);
 Value *cdr(Value *list);
 Value *second(Value *list);
 Value *third(Value *list);
+Value *fourth(Value *list);
 bool is_nil(Value *value);
 int length(Value *list);
 void print_value(Value *value);

@@ -62,6 +62,10 @@ Value *third(Value *list) {
     return car(cdr(cdr(list)));
 }
 
+Value *fourth(Value *list) {
+    return car(cdr(cdr(cdr(list))));
+}
+
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
