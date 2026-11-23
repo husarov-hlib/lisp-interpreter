@@ -1,9 +1,9 @@
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
+#include "parser.h"
 #include "tokenizer.h"
 #include "value.h"
-#include "parser.h"
 
 
 typedef struct {

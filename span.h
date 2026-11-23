@@ -1,8 +1,8 @@
 #ifndef SPAN_H
 #define SPAN_H
 
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 
 typedef struct {
     char *start;
