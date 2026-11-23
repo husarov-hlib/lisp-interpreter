@@ -56,3 +56,10 @@ Value *cdr(Value *expr) {
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
+
+int length(Value *value) {
+    if (is_nil(value))
+        return 0;
+
+    return 1 + length(cdr(value));
+}
