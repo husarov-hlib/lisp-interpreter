@@ -18,5 +18,6 @@ typedef struct Env {
 Env *make_env(Env *parent);
 Value *env_lookup(Env *env, Span symbol);
 void env_define(Env *env, Span symbol, Value *value);
+void env_define_many(Env *env, Value *symbols, Value *values);
 
 #endif
