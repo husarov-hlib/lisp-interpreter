@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "value.h"
@@ -39,4 +40,15 @@ Value *cons(Value *car, Value *cdr) {
 
 Value *nil(char *cursor) {
     return make_value(VALUE_NIL, span_between(cursor, cursor));
+}
+
+
+Value *car(Value *expr) {
+    assert(expr->type == VALUE_CONS);
+    return expr->cons.car;
+}
+
+Value *cdr(Value *expr) {
+    assert(expr->type == VALUE_CONS);
+    return expr->cons.cdr;
 }

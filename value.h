@@ -32,4 +32,7 @@ Value *make_symbol(Span span);
 Value *cons(Value *car, Value *cdr);
 Value *nil(char *cursor);
 
+Value *car(Value *expr);
+Value *cdr(Value *expr);
+
 #endif
