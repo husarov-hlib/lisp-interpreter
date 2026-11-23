@@ -47,5 +47,6 @@ Value *nil(char *cursor);
 
 Value *car(Value *expr);
 Value *cdr(Value *expr);
+bool is_nil(Value *value);
 
 #endif

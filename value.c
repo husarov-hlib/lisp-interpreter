@@ -52,3 +52,7 @@ Value *cdr(Value *expr) {
     assert(expr->type == VALUE_CONS);
     return expr->cons.cdr;
 }
+
+bool is_nil(Value *value) {
+    return value->type == VALUE_NIL;
+}
