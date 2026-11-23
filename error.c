@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdnoreturn.h>
 #include <string.h>
 
 #include "error.h"
@@ -29,7 +30,7 @@ static void print_repeated(char c, int count) {
         putc(c, stderr);
 }
 
-void error(char *source, Span span, char *format, ...) {
+noreturn void error(char *source, Span span, char *format, ...) {
     va_list arguments;
 
     va_start(arguments, format);
