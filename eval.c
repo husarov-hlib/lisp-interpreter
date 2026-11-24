@@ -92,7 +92,7 @@ static Value *eval_form(Value *expr, Env *env) {
     return is_symbol_named(operator, "define") ? eval_define(expr, env)
          : is_symbol_named(operator, "lambda") ? eval_lambda(expr, env)
          : is_symbol_named(operator, "if")     ? eval_if(expr, env)
-         :                                       eval_call(expr, env);
+                                               : eval_call(expr, env);
 }
 
 Value *eval(Value *expr, Env *env) {

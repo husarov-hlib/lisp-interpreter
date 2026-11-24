@@ -54,7 +54,7 @@ static Value *parse_atom(Parser *parser) {
     return is_number(atom)                ? make_number(span_to_double(atom), atom)
          : span_equals_string(atom, "#t") ? make_boolean(true, atom)
          : span_equals_string(atom, "#f") ? make_boolean(false, atom)
-         :                                  make_symbol(atom);
+                                          : make_symbol(atom);
 }
 
 static Value *parse_list(Parser *parser) {
