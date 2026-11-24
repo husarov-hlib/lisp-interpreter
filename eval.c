@@ -17,17 +17,17 @@ static void expect_operands(Value *expr, int expected) {
 }
 
 static Span expect_symbol(Value *expr) {
-    if (expr->type != VALUE_SYMBOL)
-        error(expr->span, "expected a symbol");
+    if (expr->type == VALUE_SYMBOL)
+        return expr->span;
 
-    return expr->span;
+    error(expr->span, "expected a symbol");
 }
 
 static Value *expect_list(Value *expr) {
-    if (expr->type != VALUE_CONS)
-        error(expr->span, "expected a list");
+    if (is_nil(expr) || is_cons(expr))
+        return expr;
 
-    return expr;
+    error(expr->span, "expected a list");
 }
 
 
