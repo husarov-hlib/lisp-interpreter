@@ -82,15 +82,6 @@ Value *third(Value *list) {
     return car(cdr(cdr(list)));
 }
 
-Value *nth(Value *list, int index) {
-    assert(index >= 0);
-
-    if (index == 0)
-        return car(list);
-
-    return nth(cdr(list), index-1);
-}
-
 int length(Value *list) {
     if (is_nil(list))
         return 0;
