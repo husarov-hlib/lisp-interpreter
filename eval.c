@@ -107,6 +107,6 @@ void eval_program(Value *program) {
     Env *env = make_env(NULL);
     define_builtins(env);
 
-    for (Value *expr = program; !is_nil(expr); expr = cdr(expr))
-        eval(car(expr), env);
+    for (Value *rest = program; !is_nil(rest); rest = cdr(rest))
+        eval(car(rest), env);
 }
