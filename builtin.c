@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "builtin.h"
 #include "env.h"
 #include "error.h"
@@ -55,6 +57,23 @@ BUILTIN_COMPARISON(less_or_equal, <=);
 BUILTIN_COMPARISON(greater_or_equal, >=);
 
 
+static Value *builtin_display(Value *arguments, Value *call_expr) {
+    expect_operands(call_expr, 1);
+    print_value(first(arguments));
+
+    return nil(NO_SPAN);
+}
+
+static Value *builtin_newline(Value *arguments, Value *call_expr) {
+    (void) arguments;
+
+    expect_operands(call_expr, 0);
+    printf("\n");
+
+    return nil(NO_SPAN);
+}
+
+
 static void define_builtin(Env *env, char *name, Builtin *builtin) {
     env_define(env, span_from_string(name), make_builtin(builtin));
 }
@@ -70,4 +89,7 @@ void define_builtins(Env *env) {
     define_builtin(env, ">", builtin_greater);
     define_builtin(env, "<=", builtin_less_or_equal);
     define_builtin(env, ">=", builtin_greater_or_equal);
+
+    define_builtin(env, "display", builtin_display);
+    define_builtin(env, "newline", builtin_newline);
 }
