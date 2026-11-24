@@ -3,11 +3,7 @@
 
 #include "value.h"
 
-typedef struct {
-    Env *env;
-} Context;
-
-Value *eval(Value *expr, Context context);
+Value *eval(Value *expr, Env *env);
 void eval_program(Value *program);
 
 #endif
