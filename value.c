@@ -70,6 +70,10 @@ Value *cdr(Value *value) {
     return value->cons.cdr;
 }
 
+Value *first(Value *list) {
+    return car(list);
+}
+
 Value *second(Value *list) {
     return car(cdr(list));
 }

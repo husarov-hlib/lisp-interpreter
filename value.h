@@ -49,6 +49,7 @@ Value *nil(char *cursor);
 
 Value *car(Value *value);
 Value *cdr(Value *value);
+Value *first(Value *list);
 Value *second(Value *list);
 Value *third(Value *list);
 Value *fourth(Value *list);
