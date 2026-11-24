@@ -95,6 +95,14 @@ bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
 
+static bool is_false(Value *value) {
+    return value->type == VALUE_BOOLEAN && value->boolean == false;
+}
+
+bool is_truthy(Value *value) {
+    return !is_false(value);
+}
+
 int length(Value *list) {
     if (is_nil(list))
         return 0;

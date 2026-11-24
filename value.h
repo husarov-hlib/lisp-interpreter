@@ -54,6 +54,7 @@ Value *third(Value *list);
 Value *fourth(Value *list);
 Value *nth(Value *list, int index);
 bool is_nil(Value *value);
+bool is_truthy(Value *value);
 int length(Value *list);
 void print_value(Value *value);
 
