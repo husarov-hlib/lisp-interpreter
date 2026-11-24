@@ -14,7 +14,7 @@ typedef struct {
     Value *body;
 } Closure;
 
-typedef Value *Builtin(Value *arguments, Value *call);
+typedef Value *Builtin(Value *arguments, Value *call_expr);
 
 typedef enum {
     VALUE_NUMBER,
