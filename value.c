@@ -47,16 +47,16 @@ Value *make_builtin(Builtin *builtin) {
     return value;
 }
 
-Value *cons(Value *car, Value *cdr) {
-    Value *value = make_value(VALUE_CONS, span_cover(car->span, cdr->span));
+Value *cons(Value *car, Value *cdr, Span span) {
+    Value *value = make_value(VALUE_CONS, span);
     value->cons.car = car;
     value->cons.cdr = cdr;
 
     return value;
 }
 
-Value *nil(char *cursor) {
-    return make_value(VALUE_NIL, span_between(cursor, cursor));
+Value *nil(Span span) {
+    return make_value(VALUE_NIL, span);
 }
 
 

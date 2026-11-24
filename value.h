@@ -43,8 +43,8 @@ Value *make_boolean(bool boolean, Span span);
 Value *make_symbol(Span span);
 Value *make_closure(Env *env, Value *parameters, Value *body);
 Value *make_builtin(Builtin *builtin);
-Value *cons(Value *car, Value *cdr);
-Value *nil(char *cursor);
+Value *cons(Value *car, Value *cdr, Span span);
+Value *nil(Span span);
 
 Value *car(Value *value);
 Value *cdr(Value *value);

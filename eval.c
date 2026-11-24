@@ -76,12 +76,12 @@ static Value *eval_if(Value *expr, Env *env) {
 
 static Value *eval_each(Value *list, Env *env) {
     if (is_nil(list))
-        return nil(NULL);
+        return nil(NO_SPAN);
 
     Value *value = eval(car(list), env);
     Value *rest = eval_each(cdr(list), env);
 
-    return cons(value, rest);
+    return cons(value, rest, NO_SPAN);
 }
 
 static Value *apply_closure(Closure closure, Value *arguments, Value *call_expr) {

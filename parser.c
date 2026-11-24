@@ -79,12 +79,14 @@ static Value *parse_value(Parser *parser) {
 }
 
 static Value *parse_many_values(Parser *parser) {
-    Value *car = parse_value(parser);
+    Value *value = parse_value(parser);
 
-    if (car == NULL)
-        return nil(parser->cursor);
+    if (value == NULL)
+        return nil(empty_span_at(parser->cursor));
 
-    return cons(car, parse_many_values(parser));
+    Value *rest = parse_many_values(parser);
+
+    return cons(value, rest, span_cover(value->span, rest->span));
 }
 
 Value *parse_program(char *source) {
