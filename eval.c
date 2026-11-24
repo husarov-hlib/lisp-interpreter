@@ -68,12 +68,16 @@ static Value *eval_call(Value *expr, Context context) {
         return function->builtin(arguments, expr, context.source);
 
     if (function->type == VALUE_CLOSURE) {
+        Value *parameters = function->closure.parameters;
+
+        expect_operands(expr, length(parameters), context);
+
         Context call_context = {
             .env = make_env(function->closure.env),
             .source = context.source
         };
 
-        env_define_many(call_context.env, function->closure.parameters, arguments);
+        env_define_many(call_context.env, parameters, arguments);
 
         return eval(function->closure.body, call_context);
     }
