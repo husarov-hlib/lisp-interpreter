@@ -31,6 +31,13 @@ Value *make_symbol(Span span) {
     return make_value(VALUE_SYMBOL, span);
 }
 
+Value *make_builtin(Builtin *builtin) {
+    Value *value = make_value(VALUE_BUILTIN, NO_SPAN);
+    value->builtin = builtin;
+
+    return value;
+}
+
 Value *cons(Value *car, Value *cdr) {
     Value *value = make_value(VALUE_CONS, span_cover(car->span, cdr->span));
     value->cons.car = car;
