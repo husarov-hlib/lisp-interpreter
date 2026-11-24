@@ -40,6 +40,12 @@ static Value *eval_define(Value *expr, Context context) {
     return value;
 }
 
+static Value *eval_lambda(Value *expr, Context context) {
+    expect_operands(expr, 2, context);
+
+    return make_closure(context.env, second(expr), third(expr));
+}
+
 static Value *eval_if(Value *expr, Context context) {
     expect_operands(expr, 3, context);
 
@@ -90,6 +96,7 @@ static Value *eval_form(Value *expr, Context context) {
     Value *operator = car(expr);
 
     return is_symbol_named(operator, "define") ? eval_define(expr, context)
+         : is_symbol_named(operator, "lambda") ? eval_lambda(expr, context)
          : is_symbol_named(operator, "if")     ? eval_if(expr, context)
          :                                       eval_call(expr, context);
 }

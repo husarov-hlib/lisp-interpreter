@@ -31,6 +31,15 @@ Value *make_symbol(Span span) {
     return make_value(VALUE_SYMBOL, span);
 }
 
+Value *make_closure(Env *env, Value *parameters, Value *body) {
+    Value *value = make_value(VALUE_CLOSURE, NO_SPAN);
+    value->closure.env = env;
+    value->closure.parameters = parameters;
+    value->closure.body = body;
+
+    return value;
+}
+
 Value *make_builtin(Builtin *builtin) {
     Value *value = make_value(VALUE_BUILTIN, NO_SPAN);
     value->builtin = builtin;

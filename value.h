@@ -42,6 +42,7 @@ typedef struct Value {
 Value *make_number(double number, Span span);
 Value *make_boolean(bool boolean, Span span);
 Value *make_symbol(Span span);
+Value *make_closure(Env *env, Value *parameters, Value *body);
 Value *make_builtin(Builtin *builtin);
 Value *cons(Value *car, Value *cdr);
 Value *nil(char *cursor);
