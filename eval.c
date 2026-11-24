@@ -9,10 +9,10 @@ static bool is_symbol_named(Value *value, char *name) {
 }
 
 static void expect_operands(Value *expr, int expected, Context context) {
-    int operands = length(cdr(expr));
+    int count = length(cdr(expr));
 
-    if (operands != expected)
-        error(context.source, expr->span, "expected %d operands, got %d", expected, operands);
+    if (count != expected)
+        error(context.source, expr->span, "expected %d operands, got %d", expected, count);
 }
 
 
