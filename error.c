@@ -8,7 +8,10 @@
 #include "span.h"
 
 
-static int count_lines(char *source, char *cursor) {
+char *source;
+
+
+static int count_lines(char *cursor) {
     int lines = 1;
 
     for (char *c = source; c < cursor; c++)
@@ -18,7 +21,7 @@ static int count_lines(char *source, char *cursor) {
     return lines;
 }
 
-static char *find_line_start(char *source, char *cursor) {
+static char *find_line_start(char *cursor) {
     while (cursor > source && cursor[-1] != '\n')
         cursor--;
 
@@ -30,7 +33,7 @@ static void print_repeated(char c, int count) {
         putc(c, stderr);
 }
 
-noreturn void error(char *source, Span span, char *format, ...) {
+noreturn void error(Span span, char *format, ...) {
     va_list arguments;
 
     va_start(arguments, format);
@@ -39,8 +42,8 @@ noreturn void error(char *source, Span span, char *format, ...) {
     putc('\n', stderr);
     va_end(arguments);
 
-    int line_number = count_lines(source, span.start);
-    char *line_start = find_line_start(source, span.start);
+    int line_number = count_lines(span.start);
+    char *line_start = find_line_start(span.start);
     int line_length = strcspn(line_start, "\n");
 
     fprintf(stderr, "%3d | %.*s\n", line_number, line_length, line_start);

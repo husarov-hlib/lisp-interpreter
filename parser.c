@@ -7,7 +7,6 @@
 
 
 typedef struct {
-    char *source;
     char *cursor;
 } Parser;
 
@@ -90,10 +89,7 @@ static Value *parse_many_values(Parser *parser) {
 }
 
 Value *parse_program(char *source) {
-    Parser parser = {
-        .source = source,
-        .cursor = source
-    };
+    Parser parser = {.cursor = source};
 
     Value *program = parse_many_values(&parser);
 

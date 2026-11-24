@@ -9,11 +9,11 @@ static bool is_symbol_named(Value *value, char *name) {
     return value->type == VALUE_SYMBOL && span_equals_string(value->span, name);
 }
 
-static void expect_operands(Value *expr, int expected, Context context) {
+static void expect_operands(Value *expr, int expected) {
     int count = length(cdr(expr));
 
     if (count != expected)
-        error(context.source, expr->span, "expected %d operands, got %d", expected, count);
+        error(expr->span, "expected %d operands, got %d", expected, count);
 }
 
 
@@ -21,18 +21,18 @@ static Value *eval_symbol(Value *expr, Context context) {
     Value *value = env_lookup(context.env, expr->span);
 
     if (value == NULL)
-        error(context.source, expr->span, "symbol not defined");
+        error(expr->span, "symbol not defined");
 
     return value;
 }
 
 static Value *eval_define(Value *expr, Context context) {
-    expect_operands(expr, 2, context);
+    expect_operands(expr, 2);
 
     Value *symbol = second(expr);
 
     if (symbol->type != VALUE_SYMBOL)
-        error(context.source, symbol->span, "can't define a non-symbol");
+        error(symbol->span, "can't define a non-symbol");
 
     Value *value = eval(third(expr), context);
     env_define(context.env, symbol->span, value);
@@ -41,13 +41,13 @@ static Value *eval_define(Value *expr, Context context) {
 }
 
 static Value *eval_lambda(Value *expr, Context context) {
-    expect_operands(expr, 2, context);
+    expect_operands(expr, 2);
 
     return make_closure(context.env, second(expr), third(expr));
 }
 
 static Value *eval_if(Value *expr, Context context) {
-    expect_operands(expr, 3, context);
+    expect_operands(expr, 3);
 
     Value *predicate = eval(second(expr), context);
 
@@ -72,16 +72,15 @@ static Value *eval_call(Value *expr, Context context) {
     Value *arguments = eval_each(cdr(expr), context);
 
     if (function->type == VALUE_BUILTIN)
-        return function->builtin(arguments, expr, context.source);
+        return function->builtin(arguments, expr);
 
     if (function->type == VALUE_CLOSURE) {
         Value *parameters = function->closure.parameters;
 
-        expect_operands(expr, length(parameters), context);
+        expect_operands(expr, length(parameters));
 
         Context call_context = {
-            .env = make_env(function->closure.env),
-            .source = context.source
+            .env = make_env(function->closure.env)
         };
 
         env_define_many(call_context.env, parameters, arguments);
@@ -89,7 +88,7 @@ static Value *eval_call(Value *expr, Context context) {
         return eval(function->closure.body, call_context);
     }
 
-    error(context.source, expr->span, "not a valid function");
+    error(expr->span, "not a valid function");
 }
 
 static Value *eval_form(Value *expr, Context context) {
@@ -109,10 +108,9 @@ Value *eval(Value *expr, Context context) {
     }
 }
 
-void eval_program(Value *program, char *source) {
+void eval_program(Value *program) {
     Context context = {
-        .env = make_env(NULL),
-        .source = source
+        .env = make_env(NULL)
     };
 
     define_builtins(context.env);

@@ -5,10 +5,9 @@
 
 typedef struct {
     Env *env;
-    char *source;
 } Context;
 
 Value *eval(Value *expr, Context context);
-void eval_program(Value *program, char *source);
+void eval_program(Value *program);
 
 #endif
