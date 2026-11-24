@@ -9,11 +9,14 @@ static bool is_symbol_named(Value *value, char *name) {
     return value->type == VALUE_SYMBOL && span_equals_string(value->span, name);
 }
 
-static void expect_operands(Value *expr, int expected) {
-    int count = length(cdr(expr));
+static Value *expect_operands(Value *expr, int expected) {
+    Value *operands = cdr(expr);
+    int count = length(operands);
 
-    if (count != expected)
-        error(expr->span, "expected %d operands, got %d", expected, count);
+    if (count == expected)
+        return operands;
+
+    error(expr->span, "expected %d operands, got %d", expected, count);
 }
 
 static Span expect_symbol(Value *expr) {
@@ -41,33 +44,34 @@ static Value *eval_symbol(Value *expr, Env *env) {
 }
 
 static Value *eval_define(Value *expr, Env *env) {
-    expect_operands(expr, 2);
+    Value *operands = expect_operands(expr, 2);
 
-    Span symbol = expect_symbol(second(expr));
-    Value *value = eval(third(expr), env);
+    Span symbol = expect_symbol(first(operands));
+    Value *value = eval(second(operands), env);
     env_define(env, symbol, value);
 
     return value;
 }
 
 static Value *eval_lambda(Value *expr, Env *env) {
-    expect_operands(expr, 2);
+    Value *operands = expect_operands(expr, 2);
 
-    Value *parameters = expect_list(second(expr));
+    Value *parameters = expect_list(first(operands));
+    Value *body = second(operands);
 
     for (Value *rest = parameters; !is_nil(rest); rest = cdr(rest))
         expect_symbol(car(rest));
 
-    return make_closure(env, parameters, third(expr));
+    return make_closure(env, parameters, body);
 }
 
 static Value *eval_if(Value *expr, Env *env) {
-    expect_operands(expr, 3);
+    Value *operands = expect_operands(expr, 3);
 
-    Value *test = eval(second(expr), env);
+    Value *test = eval(first(operands), env);
 
-    return is_truthy(test) ? eval(third(expr), env)
-                           : eval(fourth(expr), env);
+    return is_truthy(test) ? eval(second(operands), env)
+                           : eval(third(operands), env);
 }
 
 static Value *eval_each(Value *list, Env *env) {
