@@ -52,7 +52,6 @@ Value *cdr(Value *value);
 Value *first(Value *list);
 Value *second(Value *list);
 Value *third(Value *list);
-Value *fourth(Value *list);
 Value *nth(Value *list, int index);
 int length(Value *list);
 

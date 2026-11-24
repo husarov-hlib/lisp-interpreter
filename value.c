@@ -82,10 +82,6 @@ Value *third(Value *list) {
     return car(cdr(cdr(list)));
 }
 
-Value *fourth(Value *list) {
-    return car(cdr(cdr(cdr(list))));
-}
-
 Value *nth(Value *list, int index) {
     assert(index >= 0);
 
