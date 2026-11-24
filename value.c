@@ -60,14 +60,14 @@ Value *nil(char *cursor) {
 }
 
 
-Value *car(Value *list) {
-    assert(list->type == VALUE_CONS);
-    return list->cons.car;
+Value *car(Value *value) {
+    assert(is_cons(value));
+    return value->cons.car;
 }
 
-Value *cdr(Value *list) {
-    assert(list->type == VALUE_CONS);
-    return list->cons.cdr;
+Value *cdr(Value *value) {
+    assert(is_cons(value));
+    return value->cons.cdr;
 }
 
 Value *second(Value *list) {

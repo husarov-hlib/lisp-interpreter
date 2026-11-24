@@ -47,8 +47,8 @@ Value *make_builtin(Builtin *builtin);
 Value *cons(Value *car, Value *cdr);
 Value *nil(char *cursor);
 
-Value *car(Value *list);
-Value *cdr(Value *list);
+Value *car(Value *value);
+Value *cdr(Value *value);
 Value *second(Value *list);
 Value *third(Value *list);
 Value *fourth(Value *list);
