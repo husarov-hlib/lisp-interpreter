@@ -1,3 +1,4 @@
+#include "builtin.h"
 #include "env.h"
 #include "error.h"
 #include "eval.h"
@@ -106,6 +107,8 @@ void eval_program(Value *program, char *source) {
         .env = make_env(NULL),
         .source = source
     };
+
+    define_builtins(context.env);
 
     for (Value *expr = program; !is_nil(expr); expr = cdr(expr))
         eval(car(expr), context);
