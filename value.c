@@ -66,6 +66,15 @@ Value *fourth(Value *list) {
     return car(cdr(cdr(cdr(list))));
 }
 
+Value *nth(Value *list, int index) {
+    assert(index >= 0);
+
+    if (index == 0)
+        return car(list);
+
+    return nth(cdr(list), index-1);
+}
+
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }

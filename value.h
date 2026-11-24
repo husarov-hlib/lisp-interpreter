@@ -50,6 +50,7 @@ Value *cdr(Value *list);
 Value *second(Value *list);
 Value *third(Value *list);
 Value *fourth(Value *list);
+Value *nth(Value *list, int index);
 bool is_nil(Value *value);
 int length(Value *list);
 void print_value(Value *value);
