@@ -84,25 +84,24 @@ static Value *eval_each(Value *list, Env *env) {
     return cons(value, rest);
 }
 
+static Value *apply_closure(Closure closure, Value *arguments, Value *call_expr) {
+    expect_operands(call_expr, length(closure.parameters));
+
+    Env *env = make_env(closure.env);
+    env_define_many(env, closure.parameters, arguments);
+
+    return eval(closure.body, env);
+}
+
 static Value *eval_call(Value *expr, Env *env) {
     Value *function = eval(car(expr), env);
     Value *arguments = eval_each(cdr(expr), env);
 
-    if (function->type == VALUE_BUILTIN)
-        return function->builtin(arguments, expr);
-
-    if (function->type == VALUE_CLOSURE) {
-        Value *parameters = function->closure.parameters;
-
-        expect_operands(expr, length(parameters));
-
-        Env *call_env = make_env(function->closure.env);
-        env_define_many(call_env, parameters, arguments);
-
-        return eval(function->closure.body, call_env);
+    switch (function->type) {
+        case VALUE_BUILTIN: return function->builtin(arguments, expr);
+        case VALUE_CLOSURE: return apply_closure(function->closure, arguments, expr);
+        default:            error(expr->span, "not a valid function");
     }
-
-    error(expr->span, "not a valid function");
 }
 
 static Value *eval_form(Value *expr, Env *env) {
