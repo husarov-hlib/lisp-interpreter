@@ -8,7 +8,7 @@
 typedef struct Env Env;
 typedef struct Value Value;
 
-typedef Value *Builtin(Value *arguments);
+typedef Value *Builtin(Value *arguments, Value *call, char *source);
 
 typedef enum {
     VALUE_NUMBER,

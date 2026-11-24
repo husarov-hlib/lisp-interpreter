@@ -65,7 +65,7 @@ static Value *eval_call(Value *expr, Context context) {
     Value *arguments = eval_each(cdr(expr), context);
 
     if (function->type == VALUE_BUILTIN)
-        return function->builtin(arguments);
+        return function->builtin(arguments, expr, context.source);
 
     if (function->type == VALUE_CLOSURE) {
         Context call_context = {
