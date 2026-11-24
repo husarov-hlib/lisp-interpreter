@@ -99,6 +99,10 @@ int length(Value *list) {
 }
 
 
+bool is_cons(Value *value) {
+    return value->type == VALUE_CONS;
+}
+
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }

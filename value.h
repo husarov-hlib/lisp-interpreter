@@ -55,6 +55,7 @@ Value *fourth(Value *list);
 Value *nth(Value *list, int index);
 int length(Value *list);
 
+bool is_cons(Value *value);
 bool is_nil(Value *value);
 bool is_truthy(Value *value);
 
