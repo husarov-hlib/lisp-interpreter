@@ -8,6 +8,12 @@
 typedef struct Env Env;
 typedef struct Value Value;
 
+typedef struct {
+    Env *env;
+    Value *parameters;
+    Value *body;
+} Closure;
+
 typedef Value *Builtin(Value *arguments, Value *call);
 
 typedef enum {
@@ -26,16 +32,9 @@ typedef struct Value {
     union {
         double number;
         bool boolean;
-        struct {
-            Env *env;
-            Value *parameters;
-            Value *body;
-        } closure;
+        Closure closure;
         Builtin *builtin;
-        struct {
-            Value *car;
-            Value *cdr;
-        } cons;
+        struct { Value *car; Value *cdr; } cons;
     };
 } Value;
 
