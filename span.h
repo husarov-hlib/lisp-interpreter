@@ -9,6 +9,11 @@ typedef struct {
     int length;
 } Span;
 
+static const Span NO_SPAN = {
+    .start = NULL,
+    .length = 0
+};
+
 static inline char *span_end(Span span) {
     return span.start + span.length;
 }
