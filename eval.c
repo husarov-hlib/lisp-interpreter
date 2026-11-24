@@ -49,12 +49,10 @@ static Value *eval_lambda(Value *expr, Env *env) {
 static Value *eval_if(Value *expr, Env *env) {
     expect_operands(expr, 3);
 
-    Value *predicate = eval(second(expr), env);
+    Value *test = eval(second(expr), env);
 
-    if (predicate->type == VALUE_BOOLEAN && predicate->boolean == false)
-        return eval(fourth(expr), env);
-    else
-        return eval(third(expr), env);
+    return is_truthy(test) ? eval(third(expr), env)
+                           : eval(fourth(expr), env);
 }
 
 static Value *eval_each(Value *expr, Env *env) {
