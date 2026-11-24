@@ -91,6 +91,14 @@ Value *nth(Value *list, int index) {
     return nth(cdr(list), index-1);
 }
 
+int length(Value *list) {
+    if (is_nil(list))
+        return 0;
+
+    return 1 + length(cdr(list));
+}
+
+
 bool is_nil(Value *value) {
     return value->type == VALUE_NIL;
 }
@@ -101,13 +109,6 @@ static bool is_false(Value *value) {
 
 bool is_truthy(Value *value) {
     return !is_false(value);
-}
-
-int length(Value *list) {
-    if (is_nil(list))
-        return 0;
-
-    return 1 + length(cdr(list));
 }
 
 
