@@ -20,7 +20,6 @@ static Token peek_token(Parser *parser) {
 
 static Token next_token(Parser *parser) {
     Token token = scan_token(parser->cursor);
-
     parser->cursor = span_end(token.span);
 
     return token;
@@ -92,7 +91,6 @@ Value *parse_program(char *source) {
     Parser parser = {.cursor = source};
 
     Value *program = parse_many_values(&parser);
-
     expect_token(&parser, TOKEN_EOF);
 
     return program;
