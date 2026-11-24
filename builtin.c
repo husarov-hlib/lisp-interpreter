@@ -4,37 +4,32 @@
 #include "value.h"
 
 
-static Span argument_span(Value *call_expr, int index) {
-    Value *unevaluated_arguments = cdr(call_expr);
+static Value *expect_operands(Value *expr, int expected) {
+    Value *operands = cdr(expr);
+    int count = length(operands);
 
-    return nth(unevaluated_arguments, index)->span;
+    if (count == expected)
+        return operands;
+
+    error(expr->span, "expected %d operands, got %d", expected, count);
 }
 
-static void expect_operands(Value *call_expr, int expected) {
-    int count = length(cdr(call_expr));
+static double expect_number(Value *argument, Value *operand) {
+    if (argument->type == VALUE_NUMBER)
+        return argument->number;
 
-    if (count != expected)
-        error(call_expr->span, "expected %d operands, got %d", expected, count);
-}
-
-static double expect_number(Value *arguments, Value *call_expr, int index) {
-    Value *argument = nth(arguments, index);
-
-    if (argument->type != VALUE_NUMBER)
-        error(argument_span(call_expr, index), "expected a number");
-
-    return argument->number;
+    error(operand->span, "expected a number");
 }
 
 
-#define BUILTIN_ARITHMETIC(name, operator)                             \
-    static Value *builtin_##name(Value *arguments, Value *call_expr) { \
-        expect_operands(call_expr, 2);                                 \
-                                                                       \
-        double result = expect_number(arguments, call_expr, 0)         \
-               operator expect_number(arguments, call_expr, 1);        \
-                                                                       \
-        return make_number(result, NO_SPAN);                           \
+#define BUILTIN_ARITHMETIC(name, operator)                                  \
+    static Value *builtin_##name(Value *arguments, Value *call_expr) {      \
+        Value *operands = expect_operands(call_expr, 2);                    \
+                                                                            \
+        double result = expect_number(first(arguments), first(operands))    \
+               operator expect_number(second(arguments), second(operands)); \
+                                                                            \
+        return make_number(result, NO_SPAN);                                \
     }
 
 BUILTIN_ARITHMETIC(add, +);
