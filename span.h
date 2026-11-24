@@ -14,6 +14,13 @@ static const Span NO_SPAN = {
     .length = 0
 };
 
+static inline Span empty_span_at(char *position) {
+    return (Span) {
+        .start = position,
+        .length = 0
+    };
+}
+
 static inline char *span_end(Span span) {
     return span.start + span.length;
 }
