@@ -53,7 +53,12 @@ static Value *eval_define(Value *expr, Env *env) {
 static Value *eval_lambda(Value *expr, Env *env) {
     expect_operands(expr, 2);
 
-    return make_closure(env, second(expr), third(expr));
+    Value *parameters = expect_list(second(expr));
+
+    for (Value *rest = parameters; !is_nil(rest); rest = cdr(rest))
+        expect_symbol(car(rest));
+
+    return make_closure(env, parameters, third(expr));
 }
 
 static Value *eval_if(Value *expr, Env *env) {
