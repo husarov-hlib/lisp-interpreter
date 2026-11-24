@@ -55,12 +55,12 @@ static Value *eval_if(Value *expr, Env *env) {
                            : eval(fourth(expr), env);
 }
 
-static Value *eval_each(Value *expr, Env *env) {
-    if (is_nil(expr))
+static Value *eval_each(Value *list, Env *env) {
+    if (is_nil(list))
         return nil(NULL);
 
-    Value *first = eval(car(expr), env);
-    Value *rest = eval_each(cdr(expr), env);
+    Value *first = eval(car(list), env);
+    Value *rest = eval_each(cdr(list), env);
 
     return cons(first, rest);
 }
