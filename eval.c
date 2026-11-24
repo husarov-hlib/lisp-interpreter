@@ -16,6 +16,20 @@ static void expect_operands(Value *expr, int expected) {
         error(expr->span, "expected %d operands, got %d", expected, count);
 }
 
+static Span expect_symbol(Value *expr) {
+    if (expr->type != VALUE_SYMBOL)
+        error(expr->span, "expected a symbol");
+
+    return expr->span;
+}
+
+static Value *expect_list(Value *expr) {
+    if (expr->type != VALUE_CONS)
+        error(expr->span, "expected a list");
+
+    return expr;
+}
+
 
 static Value *eval_symbol(Value *expr, Env *env) {
     Value *value = env_lookup(env, expr->span);
