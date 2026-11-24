@@ -78,10 +78,10 @@ static Value *eval_each(Value *list, Env *env) {
     if (is_nil(list))
         return nil(NULL);
 
-    Value *first = eval(car(list), env);
+    Value *value = eval(car(list), env);
     Value *rest = eval_each(cdr(list), env);
 
-    return cons(first, rest);
+    return cons(value, rest);
 }
 
 static Value *eval_call(Value *expr, Env *env) {
