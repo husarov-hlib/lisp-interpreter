@@ -43,13 +43,9 @@ static Value *eval_symbol(Value *expr, Env *env) {
 static Value *eval_define(Value *expr, Env *env) {
     expect_operands(expr, 2);
 
-    Value *symbol = second(expr);
-
-    if (symbol->type != VALUE_SYMBOL)
-        error(symbol->span, "can't define a non-symbol");
-
+    Span symbol = expect_symbol(second(expr));
     Value *value = eval(third(expr), env);
-    env_define(env, symbol->span, value);
+    env_define(env, symbol, value);
 
     return value;
 }
