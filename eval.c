@@ -54,10 +54,13 @@ static Value *eval_define(Value *expr, Env *env) {
 }
 
 static Value *eval_lambda(Value *expr, Env *env) {
-    Value *operands = expect_operands(expr, 2);
+    Value *operands = cdr(expr);
 
-    Value *parameters = expect_list(first(operands));
-    Value *body = second(operands);
+    if (length(operands) < 2)
+        error(expr->span, "expected at least 2 operands, got %d", length(operands));
+
+    Value *parameters = expect_list(car(operands));
+    Value *body = cdr(operands);
 
     for (Value *rest = parameters; !is_nil(rest); rest = cdr(rest))
         expect_symbol(car(rest));
@@ -105,7 +108,7 @@ static Value *apply_closure(Closure closure, Value *arguments, Value *call_expr)
     Env *env = make_env(closure.env);
     env_define_many(env, closure.parameters, arguments);
 
-    return eval(closure.body, env);
+    return eval_sequence(closure.body, env);
 }
 
 static Value *eval_call(Value *expr, Env *env) {
