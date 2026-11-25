@@ -107,6 +107,15 @@ bool is_truthy(Value *value) {
 }
 
 
+static void print_many_values(Value *list) {
+    print_value(car(list));
+
+    if (!is_nil(cdr(list))) {
+        printf(" ");
+        print_many_values(cdr(list));
+    }
+}
+
 void print_value(Value *value) {
     switch (value->type) {
         case VALUE_NUMBER:
@@ -123,8 +132,7 @@ void print_value(Value *value) {
             break;
         case VALUE_CONS:
             printf("(");
-            for (Value *list = value; !is_nil(cdr(list)); list = cdr(list))
-                print_value(car(list));
+            print_many_values(value);
             printf(")");
             break;
         default:
