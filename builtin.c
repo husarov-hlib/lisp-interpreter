@@ -23,6 +23,13 @@ static double expect_number(Value *argument, Value *operand) {
     error(operand->span, "expected a number");
 }
 
+static Value *expect_cons(Value *argument, Value *operand) {
+    if (argument->type == VALUE_CONS)
+        return argument;
+
+    error(operand->span, "expected a cons");
+}
+
 
 #define BUILTIN_ARITHMETIC(name, operator)                                  \
     static Value *builtin_##name(Value *arguments, Value *call_expr) {      \
@@ -73,6 +80,18 @@ static Value *builtin_newline(Value *arguments, Value *call_expr) {
     return nil(NO_SPAN);
 }
 
+static Value *builtin_car(Value *arguments, Value *call_expr) {
+    Value *operands = expect_operands(call_expr, 1);
+
+    return car(expect_cons(first(arguments), first(operands)));
+}
+
+static Value *builtin_cdr(Value *arguments, Value *call_expr) {
+    Value *operands = expect_operands(call_expr, 1);
+
+    return cdr(expect_cons(first(arguments), first(operands)));
+}
+
 
 static void define_builtin(Env *env, char *name, Builtin *builtin) {
     env_define(env, make_symbol(span_from_string(name)), make_builtin(builtin));
@@ -92,4 +111,6 @@ void define_builtins(Env *env) {
 
     define_builtin(env, "display", builtin_display);
     define_builtin(env, "newline", builtin_newline);
+    define_builtin(env, "car", builtin_car);
+    define_builtin(env, "cdr", builtin_cdr);
 }
