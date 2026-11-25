@@ -115,6 +115,12 @@ static Value *builtin_cdr(Value *arguments, Value *call_expr) {
     return cdr(expect_cons(first(arguments), first(operands)));
 }
 
+static Value *builtin_cons(Value *arguments, Value *call_expr) {
+    expect_operands(call_expr, 2);
+
+    return cons(first(arguments), second(arguments), NO_SPAN);
+}
+
 
 static void define_builtin(Env *env, char *name, Builtin *builtin) {
     env_define(env, make_symbol(span_from_string(name)), make_builtin(builtin));
@@ -143,4 +149,5 @@ void define_builtins(Env *env) {
     define_builtin(env, "newline", builtin_newline);
     define_builtin(env, "car", builtin_car);
     define_builtin(env, "cdr", builtin_cdr);
+    define_builtin(env, "cons", builtin_cons);
 }
