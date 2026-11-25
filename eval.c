@@ -19,9 +19,9 @@ static Value *expect_operands(Value *expr, int expected) {
     error(expr->span, "expected %d operands, got %d", expected, count);
 }
 
-static Span expect_symbol(Value *expr) {
+static Value *expect_symbol(Value *expr) {
     if (expr->type == VALUE_SYMBOL)
-        return expr->span;
+        return expr;
 
     error(expr->span, "expected a symbol");
 }
@@ -35,7 +35,7 @@ static Value *expect_list(Value *expr) {
 
 
 static Value *eval_symbol(Value *expr, Env *env) {
-    Value *value = env_lookup(env, expr->span);
+    Value *value = env_lookup(env, expr);
 
     if (value == NULL)
         error(expr->span, "symbol not defined");
@@ -46,7 +46,7 @@ static Value *eval_symbol(Value *expr, Env *env) {
 static Value *eval_define(Value *expr, Env *env) {
     Value *operands = expect_operands(expr, 2);
 
-    Span symbol = expect_symbol(first(operands));
+    Value *symbol = expect_symbol(first(operands));
     Value *value = eval(second(operands), env);
     env_define(env, symbol, value);
 

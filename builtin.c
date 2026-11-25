@@ -75,7 +75,7 @@ static Value *builtin_newline(Value *arguments, Value *call_expr) {
 
 
 static void define_builtin(Env *env, char *name, Builtin *builtin) {
-    env_define(env, span_from_string(name), make_builtin(builtin));
+    env_define(env, make_symbol(span_from_string(name)), make_builtin(builtin));
 }
 
 void define_builtins(Env *env) {
