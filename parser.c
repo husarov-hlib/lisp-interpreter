@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "error.h"
 #include "parser.h"
 #include "tokenizer.h"
 #include "value.h"
@@ -29,8 +30,7 @@ static Token expect_token(Parser *parser, TokenType expected) {
     Token token = next_token(parser);
 
     if (token.type != expected)
-        // TODO: proper error messages
-        exit(1);
+        error(token.span, "unexpected token");
 
     return token;
 }
