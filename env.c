@@ -37,10 +37,6 @@ void env_define(Env *env, Span symbol, Value *value) {
 void env_define_many(Env *env, Value *symbols, Value *values) {
     assert(length(symbols) == length(values));
 
-    if (is_nil(symbols) || is_nil(values))
-        return;
-
-    env_define(env, car(symbols)->span, car(values));
-
-    env_define_many(env, cdr(symbols), cdr(values));
+    for (; !is_nil(symbols); symbols = cdr(symbols), values = cdr(values))
+        env_define(env, car(symbols)->span, car(values));
 }
