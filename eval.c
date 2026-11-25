@@ -74,6 +74,12 @@ static Value *eval_if(Value *expr, Env *env) {
                            : eval(third(operands), env);
 }
 
+static Value *eval_quote(Value *expr) {
+    Value *operands = expect_operands(expr, 1);
+
+    return first(operands);
+}
+
 static Value *eval_each(Value *list, Env *env) {
     if (is_nil(list))
         return nil(NO_SPAN);
@@ -110,6 +116,7 @@ static Value *eval_form(Value *expr, Env *env) {
     return is_symbol_named(operator, "define") ? eval_define(expr, env)
          : is_symbol_named(operator, "lambda") ? eval_lambda(expr, env)
          : is_symbol_named(operator, "if")     ? eval_if(expr, env)
+         : is_symbol_named(operator, "quote")  ? eval_quote(expr)
                                                : eval_call(expr, env);
 }
 
