@@ -64,6 +64,29 @@ BUILTIN_COMPARISON(less_or_equal, <=);
 BUILTIN_COMPARISON(greater_or_equal, >=);
 
 
+#define BUILTIN_TYPE_PREDICATE(name, value_type)                            \
+    static Value *builtin_##name(Value *arguments, Value *call_expr) {      \
+        expect_operands(call_expr, 1);                                      \
+                                                                            \
+        return make_boolean(first(arguments)->type == value_type, NO_SPAN); \
+    }
+
+BUILTIN_TYPE_PREDICATE(is_number, VALUE_NUMBER);
+BUILTIN_TYPE_PREDICATE(is_boolean, VALUE_BOOLEAN);
+BUILTIN_TYPE_PREDICATE(is_symbol, VALUE_SYMBOL);
+BUILTIN_TYPE_PREDICATE(is_pair, VALUE_CONS);
+BUILTIN_TYPE_PREDICATE(is_null, VALUE_NIL);
+
+static Value *builtin_is_procedure(Value *arguments, Value *call_expr) {
+    expect_operands(call_expr, 1);
+
+    bool is_procedure = first(arguments)->type == VALUE_CLOSURE
+                     || first(arguments)->type == VALUE_BUILTIN;
+
+    return make_boolean(is_procedure, NO_SPAN);
+}
+
+
 static Value *builtin_display(Value *arguments, Value *call_expr) {
     expect_operands(call_expr, 1);
     print_value(first(arguments));
@@ -108,6 +131,13 @@ void define_builtins(Env *env) {
     define_builtin(env, ">", builtin_greater);
     define_builtin(env, "<=", builtin_less_or_equal);
     define_builtin(env, ">=", builtin_greater_or_equal);
+
+    define_builtin(env, "number?", builtin_is_number);
+    define_builtin(env, "boolean?", builtin_is_boolean);
+    define_builtin(env, "symbol?", builtin_is_symbol);
+    define_builtin(env, "pair?", builtin_is_pair);
+    define_builtin(env, "null?", builtin_is_null);
+    define_builtin(env, "procedure?", builtin_is_procedure);
 
     define_builtin(env, "display", builtin_display);
     define_builtin(env, "newline", builtin_newline);
