@@ -106,7 +106,7 @@ static Value *eval_call(Value *expr, Env *env) {
     switch (function->type) {
         case VALUE_BUILTIN: return function->builtin(arguments, expr);
         case VALUE_CLOSURE: return apply_closure(function->closure, arguments, expr);
-        default:            error(expr->span, "not a valid function");
+        default:            error(car(expr)->span, "not a valid function");
     }
 }
 
