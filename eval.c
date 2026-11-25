@@ -80,6 +80,15 @@ static Value *eval_quote(Value *expr) {
     return first(operands);
 }
 
+static Value *eval_sequence(Value *list, Env *env) {
+    if (is_nil(list))
+        return nil(NO_SPAN);
+
+    Value *value = eval(car(list), env);
+
+    return is_nil(cdr(list)) ? value : eval_sequence(cdr(list), env);
+}
+
 static Value *eval_each(Value *list, Env *env) {
     if (is_nil(list))
         return nil(NO_SPAN);
@@ -117,6 +126,7 @@ static Value *eval_form(Value *expr, Env *env) {
          : is_symbol_named(operator, "lambda") ? eval_lambda(expr, env)
          : is_symbol_named(operator, "if")     ? eval_if(expr, env)
          : is_symbol_named(operator, "quote")  ? eval_quote(expr)
+         : is_symbol_named(operator, "begin")  ? eval_sequence(cdr(expr), env)
                                                : eval_call(expr, env);
 }
 
