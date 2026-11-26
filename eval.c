@@ -9,14 +9,14 @@ static bool is_symbol_named(Value *value, char *name) {
     return value->type == VALUE_SYMBOL && span_equals_string(value->span, name);
 }
 
-static Value *expect_operands(Value *expr, int expected) {
+static Value *expect_n_operands(Value *expr, int n) {
     Value *operands = cdr(expr);
     int count = length(operands);
 
-    if (count == expected)
+    if (count == n)
         return operands;
 
-    error(expr->span, "expected %d operands, got %d", expected, count);
+    error(expr->span, "expected %d operands, got %d", n, count);
 }
 
 static Value *expect_symbol(Value *expr) {
@@ -44,7 +44,7 @@ static Value *eval_symbol(Value *expr, Env *env) {
 }
 
 static Value *eval_define(Value *expr, Env *env) {
-    Value *operands = expect_operands(expr, 2);
+    Value *operands = expect_n_operands(expr, 2);
 
     Value *symbol = expect_symbol(first(operands));
     Value *value = eval(second(operands), env);
@@ -69,7 +69,7 @@ static Value *eval_lambda(Value *expr, Env *env) {
 }
 
 static Value *eval_if(Value *expr, Env *env) {
-    Value *operands = expect_operands(expr, 3);
+    Value *operands = expect_n_operands(expr, 3);
 
     Value *test = eval(first(operands), env);
 
@@ -78,7 +78,7 @@ static Value *eval_if(Value *expr, Env *env) {
 }
 
 static Value *eval_quote(Value *expr) {
-    Value *operands = expect_operands(expr, 1);
+    Value *operands = expect_n_operands(expr, 1);
 
     return first(operands);
 }
@@ -103,7 +103,7 @@ static Value *eval_each(Value *list, Env *env) {
 }
 
 static Value *apply_closure(Closure closure, Value *arguments, Value *call_expr) {
-    expect_operands(call_expr, length(closure.parameters));
+    expect_n_operands(call_expr, length(closure.parameters));
 
     Env *env = make_env(closure.env);
     env_define_many(env, closure.parameters, arguments);
