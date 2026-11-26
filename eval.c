@@ -5,8 +5,8 @@
 #include "value.h"
 
 
-static bool is_symbol_named(Value *value, char *name) {
-    return value->type == VALUE_SYMBOL && span_equals_string(value->span, name);
+static bool is_keyword(Value *value, char *keyword) {
+    return value->type == VALUE_SYMBOL && span_equals_string(value->span, keyword);
 }
 
 static Value *expect_n_operands(Value *expr, int n) {
@@ -131,11 +131,11 @@ static Value *eval_call(Value *expr, Env *env) {
 static Value *eval_form(Value *expr, Env *env) {
     Value *operator = car(expr);
 
-    return is_symbol_named(operator, "define") ? eval_define(expr, env)
-         : is_symbol_named(operator, "lambda") ? eval_lambda(expr, env)
-         : is_symbol_named(operator, "if")     ? eval_if(expr, env)
-         : is_symbol_named(operator, "quote")  ? eval_quote(expr)
-         : is_symbol_named(operator, "begin")  ? eval_sequence(cdr(expr), env)
+    return is_keyword(operator, "define") ? eval_define(expr, env)
+         : is_keyword(operator, "lambda") ? eval_lambda(expr, env)
+         : is_keyword(operator, "if")     ? eval_if(expr, env)
+         : is_keyword(operator, "quote")  ? eval_quote(expr)
+         : is_keyword(operator, "begin")  ? eval_sequence(cdr(expr), env)
                                                : eval_call(expr, env);
 }
 
