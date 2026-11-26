@@ -19,6 +19,16 @@ static Value *expect_n_operands(Value *expr, int n) {
     error(expr->span, "expected %d operands, got %d", n, count);
 }
 
+static Value *expect_at_least_n_operands(Value *expr, int n) {
+    Value *operands = cdr(expr);
+    int count = length(operands);
+
+    if (count >= n)
+        return operands;
+
+    error(expr->span, "expected at least %d operands, got %d", n, count);
+}
+
 static Value *expect_symbol(Value *expr) {
     if (expr->type == VALUE_SYMBOL)
         return expr;
@@ -54,11 +64,7 @@ static Value *eval_define(Value *expr, Env *env) {
 }
 
 static Value *eval_lambda(Value *expr, Env *env) {
-    Value *operands = cdr(expr);
-
-    if (length(operands) < 2)
-        error(expr->span, "expected at least 2 operands, got %d", length(operands));
-
+    Value *operands = expect_at_least_n_operands(expr, 2);
     Value *parameters = expect_list(car(operands));
     Value *body = cdr(operands);
 
